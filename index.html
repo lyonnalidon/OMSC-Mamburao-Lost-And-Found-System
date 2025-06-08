@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Email Notification System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background-color: #f0f2f5;
+    }
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    input, button {
+      width: 100%;
+      padding: 0.8rem;
+      margin: 0.5rem 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .notification {
+      margin-top: 1rem;
+      padding: 1rem;
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      border-radius: 6px;
+      display: none;
+    }
+  </style>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    (function () {
+      emailjs.init("QJHlXqwMnIvoTYZUp"); // Your actual EmailJS Public Key
+    })();
+
+    window.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("notifyForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value;
+        const message = document.getElementById("message").value;
+
+        const templateParams = {
+          to_email: email,
+          message: message
+        };
+
+        emailjs.send("service_l1q54cy", "template_hndfj0o", templateParams)
+          .then(function (response) {
+            console.log("SUCCESS!", response.status, response.text);
+            const notificationBox = document.getElementById("notificationBox");
+            notificationBox.style.display = "block";
+            document.getElementById("notifyForm").reset();
+          }, function (error) {
+            console.error("FAILED...", error);
+            alert("Failed to send email. Please try again.");
+          });
+      });
+    });
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h2>Email Notification System</h2>
+    <form id="notifyForm">
+      <input type="email" id="email" placeholder="Enter your email" required />
+      <input type="text" id="message" placeholder="Enter your message" required />
+      <button type="submit">Send Notification</button>
+    </form>
+    <div class="notification" id="notificationBox">
+      Email notification sent!
+    </div>
+  </div>
+</body>
+</html>
