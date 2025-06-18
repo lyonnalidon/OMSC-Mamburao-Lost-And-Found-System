@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ping2Retrieve - Item Recovery System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #0f766e;
+            --primary-dark: #115e59;
+            --primary-light: #14b8a6;
+            --accent: #f97316;
+            --accent-light: #fb923c;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --background: #f8fafc;
+            --surface: #ffffff;
+            --error: #ef4444;
+            --success: #10b981;
+            --border: #e2e8f0;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-dark);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Toggle Button */
+        .sidebar-toggle {
+            position: fixed;
+            left: 270px;
+            top: 80px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: var(--card-shadow);
+            transition: left 0.3s ease;
+        }
+
+        .sidebar-toggle:hover {
+            background: var(--primary-dark);
+        }
+
+        .sidebar-toggle i {
+            font-size: 1.2rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1.5rem 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-260px);
+        }
+
+        .logo {
+            padding: 0 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo h1 i {
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            gap: 0.8rem;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-links a.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-left: 4px solid white;
+        }
+
+        .nav-links a i {
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .nav-links a span {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-left: 260px;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 2rem;
+            padding-top: calc(70px + 2rem); /* Add padding-top to account for header height */
+            background: var(--background);
+        }
+
+        .main-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .main-content::-webkit-scrollbar-track {
+            background: var(--surface);
+        }
+
+        .main-content::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        .main-content::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        .main-content.expanded {
+            margin-left: 0;
+        }
+
+        /* Header */
+        .header {
+            background: var(--surface);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--card-shadow);
+            z-index: 10;
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 260px;
+            height: 70px;
+            transition: left 0.3s ease;
+        }
+
+        .header.expanded {
+            left: 0;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .search-container {
+            position: relative;
+            width: 450px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 3rem;
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .search-container input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+        }
+
+        .search-container i {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
+            color: white;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(249, 115, 22, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-menu-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .user-menu-btn:hover {
+            background: var(--background);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-name {
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--surface);
+            border-radius: 8px;
+            box-shadow: var(--card-shadow);
+            padding: 0.5rem 0;
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+            margin-top: 0.5rem;
+        }
+
+        .user-dropdown.active {
+            display: block;
+        }
+
+        .user-dropdown a {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .user-dropdown a:hover {
+            background: var(--background);
+            color: var(--primary);
+        }
+
+        .user-dropdown a i {
+            margin-right: 0.8rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .user-menu-btn i.fa-chevron-down {
+            font-size: 0.8rem;
+            transition: var(--transition);
+        }
+
+        .user-menu.active .user-menu-btn i.fa-chevron-down {
+            transform: rotate(180deg);
+        }
+
+        /* Mobile Menu Button */
+        .mobile-menu-btn {
+            display: flex;
+            background: none;
+            border: none;
+            color: var(--text-dark);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            position: relative;
+            z-index: 101;
+        }
+
+        .mobile-menu-btn:hover {
+            color: var(--primary);
+        }
+
+        .mobile-menu-btn.active {
+            color: var(--primary);
+        }
+
+        .mobile-menu-btn.active i {
+            transform: rotate(180deg);
+        }
+
+        .mobile-menu-btn i {
+            transition: transform 0.3s ease;
+        }
+
+        /* Content */
+        .content {
+            flex: 1;
+            padding: 2rem;
+            margin-top: 70px;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title h2 {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            background: var(--surface);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .filter-group {
+            flex: 1;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .filter-group select, .filter-group input {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: white;
+        }
+
+        .view-switch {
+            display: flex;
+            background: var(--border);
+            border-radius: 50px;
+            padding: 0.2rem;
+            margin-bottom: 1.5rem;
+            width: fit-content;
+        }
+
+        .view-switch button {
+            padding: 0.5rem 1.2rem;
+            border: none;
+            background: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .view-switch button.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .item-card {
+            background: var(--surface);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .item-image {
+            height: 180px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .item-info {
+            padding: 1.2rem;
+        }
+
+        .item-actions {
+            display: none;
+        }
+
+        .item-status {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        .status-lost {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+        }
+
+        .status-found {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .item-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+
+        .item-meta {
+            display: flex;
+            align-items: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .item-meta i {
+            margin-right: 0.5rem;
+            width: 16px;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: var(--transition);
+        }
+
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h3 {
+            font-size: 1.4rem;
+            color: var(--primary);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .item-detail {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .item-detail-image {
+            flex: 1;
+            height: 250px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+        }
+
+        .item-detail-info {
+            flex: 1;
+        }
+
+        .detail-meta {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-row {
+            display: flex;
+            margin-bottom: 0.8rem;
+        }
+
+        .detail-label {
+            width: 120px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .detail-value {
+            flex: 1;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .contact-info {
+            background: var(--background);
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+
+        .contact-info h4 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .modal-actions button {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-found {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-found:hover {
+            background: #0d9668;
+            transform: translateY(-2px);
+        }
+
+        .btn-claim {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-claim:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .header {
+                left: 0;
+            }
+
+            .search-container {
+                display: none;
+            }
+
+            .header-right {
+                margin-left: auto;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .user-profile span {
+                display: none;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+
+            .filters {
+                flex-direction: column;
+            }
+
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header {
+                padding: 0.8rem;
+            }
+
+            .btn-primary span {
+                display: none;
+            }
+
+            .btn-primary {
+                padding: 0.6rem;
+            }
+
+            .btn-primary i {
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <h1><i class="fas fa-search-location"></i> <span>Ping2Retrieve</span></h1>
+        </div>
+        <ul class="nav-links">
+            <li>
+                <a href="dashboard.html" class="active"><i class="fas fa-home"></i> <span>Dashboard</span></a>
+            </li>
+            <li>
+                <a href="search.html"><i class="fas fa-search"></i> <span>Search Items</span></a>
+            </li>
+            <li>
+                <a href="report.html"><i class="fas fa-plus-circle"></i> <span>Report Item</span></a>
+            </li>
+            <li>
+                <a href="notifications.html"><i class="fas fa-bell"></i> <span>Notifications</span></a>
+            </li>
+            <li>
+                <a href="settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a>
+            </li>
+            <li>
+                <a href="help.html"><i class="fas fa-question-circle"></i> <span>Help & Support</span></a>
+            </li>
+        </ul>
+        <button class="sidebar-toggle" onclick="toggleSidebar()">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search...">
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="btn btn-outline" onclick="window.location.href='report.html'">
+                    <i class="fas fa-plus"></i> Report Item
+                </button>
+                <div class="user-menu">
+                    <button class="user-menu-btn" onclick="toggleUserMenu()">
+                        <div class="user-avatar">JD</div>
+                        <span class="user-name">John Doe</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                        <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                        <a href="help.html"><i class="fas fa-question-circle"></i> Help</a>
+                        <a href="../login.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <div class="content">
+            <div class="section-title">
+                <h2>Recent Lost & Found Items</h2>
+                <div class="view-switch">
+                    <button class="active">Lost Items</button>
+                    <button>Found Items</button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Category</label>
+                    <select>
+                        <option>All Categories</option>
+                        <option>Electronics</option>
+                        <option>Jewelry</option>
+                        <option>Documents</option>
+                        <option>Clothing</option>
+                        <option>Bags & Wallets</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Location</label>
+                    <input type="text" placeholder="Enter location">
+                </div>
+                <div class="filter-group">
+                    <label>Date</label>
+                    <input type="date">
+                </div>
+                <div class="filter-group">
+                    <label>Status</label>
+                    <select>
+                        <option>All Status</option>
+                        <option>Lost</option>
+                        <option>Found</option>
+                        <option>Recovered</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Items Grid -->
+            <div class="items-grid">
+                <!-- Item 1 -->
+                <div class="item-card" onclick="openItemDetail(1)">
+                    <div class="item-image">
+                        <i class="fas fa-laptop"></i>
+                    </div>
+                    <div class="item-info">
+                        <span class="item-status status-lost">Lost</span>
+                        <h3>MacBook Pro 15" (2020)</h3>
+                        <div class="item-meta">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Central Library, 3rd Floor</span>
+                        </div>
+                        <div class="item-meta">
+                            <i class="fas fa-calendar"></i>
+                            <span>June 12, 2023 • 2:30 PM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="item-card" onclick="openItemDetail(2)">
+                    <div class="item-image">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="item-info">
+                        <span class="item-status status-found">Found</span>
+                        <h3>Black Leather Wallet</h3>
+                        <div class="item-meta">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Cafeteria, Table #12</span>
+                        </div>
+                        <div class="item-meta">
+                            <i class="fas fa-calendar"></i>
+                            <span>June 14, 2023 • 1:15 PM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="item-card" onclick="openItemDetail(3)">
+                    <div class="item-image">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <div class="item-info">
+                        <span class="item-status status-lost">Lost</span>
+                        <h3>iPhone 13 Pro Max</h3>
+                        <div class="item-meta">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Parking Lot B, Near Entrance</span>
+                        </div>
+                        <div class="item-meta">
+                            <i class="fas fa-calendar"></i>
+                            <span>June 15, 2023 • 5:45 PM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="item-card" onclick="openItemDetail(4)">
+                    <div class="item-image">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <div class="item-info">
+                        <span class="item-status status-found">Found</span>
+                        <h3>Car Keys with Keychain</h3>
+                        <div class="item-meta">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Reception Desk, Main Building</span>
+                        </div>
+                        <div class="item-meta">
+                            <i class="fas fa-calendar"></i>
+                            <span>June 16, 2023 • 10:20 AM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 5 -->
+                <div class="item-card" onclick="openItemDetail(5)">
+                    <div class="item-image">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="item-info">
+                        <span class="item-status status-lost">Lost</span>
+                        <h3>Chemistry Textbook</h3>
+                        <div class="item-meta">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Science Building, Room 304</span>
+                        </div>
+                        <div class="item-meta">
+                            <i class="fas fa-calendar"></i>
+                            <span>June 17, 2023 • 9:00 AM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 6 -->
+                <div class="item-card" onclick="openItemDetail(6)">
+                    <div class="item-image">
+                        <i class="fas fa-headphones"></i>
+                    </div>
+                    <div class="item-info">
+                        <span class="item-status status-found">Found</span>
+                        <h3>Wireless Headphones</h3>
+                        <div class="item-meta">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Auditorium, Seat Row 5</span>
+                        </div>
+                        <div class="item-meta">
+                            <i class="fas fa-calendar"></i>
+                            <span>June 17, 2023 • 3:30 PM</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Item Detail Modal -->
+    <div class="modal" id="itemDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Item Details</h3>
+                <button class="close-modal" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="item-detail">
+                    <div class="item-detail-image">
+                        <i class="fas fa-laptop" id="detailIcon"></i>
+                    </div>
+                    <div class="item-detail-info">
+                        <span class="item-status status-lost" id="detailStatus">Lost</span>
+                        <h3 id="detailTitle">MacBook Pro 15" (2020)</h3>
+                        
+                        <div class="detail-meta">
+                            <div class="detail-row">
+                                <div class="detail-label">Location:</div>
+                                <div class="detail-value" id="detailLocation">Central Library, 3rd Floor</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Date & Time:</div>
+                                <div class="detail-value" id="detailDateTime">June 12, 2023 • 2:30 PM</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Category:</div>
+                                <div class="detail-value" id="detailCategory">Electronics</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Description:</div>
+                                <div class="detail-value" id="detailDescription">Silver MacBook Pro with Touch Bar. Sticker on the back. Last seen on study desk near window.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-info">
+                            <h4>Contact Information</h4>
+                            <div class="detail-row">
+                                <div class="detail-label">Reported By:</div>
+                                <div class="detail-value" id="detailReporter">Sarah Johnson</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Email:</div>
+                                <div class="detail-value" id="detailEmail">sarah.j@example.com</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Phone:</div>
+                                <div class="detail-value" id="detailPhone">(555) 123-4567</div>
+                            </div>
+                        </div>
+
+                        <div class="modal-actions" id="modalActions">
+                            <!-- Buttons will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

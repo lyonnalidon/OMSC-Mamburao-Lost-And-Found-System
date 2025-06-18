@@ -1,0 +1,79 @@
+/* Sidebar Toggle Button */
+.sidebar-toggle {
+    position: fixed;
+    left: 260px;
+    top: 80px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s ease;
+}
+
+.sidebar-toggle:hover {
+    background: var(--primary-dark);
+    transform: scale(1.1);
+}
+
+.sidebar-toggle i {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.sidebar.collapsed + .sidebar-toggle {
+    left: 10px;
+}
+
+.sidebar.collapsed + .sidebar-toggle i {
+    transform: rotate(180deg);
+}
+
+/* Mobile Menu Button */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-dark);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    position: relative;
+    z-index: 101;
+}
+
+.mobile-menu-btn:hover {
+    color: var(--primary);
+}
+
+.mobile-menu-btn.active {
+    color: var(--primary);
+}
+
+.mobile-menu-btn.active i {
+    transform: rotate(180deg);
+}
+
+.mobile-menu-btn i {
+    transition: transform 0.3s ease;
+}
+
+@media (max-width: 992px) {
+    .mobile-menu-btn {
+        display: flex;
+    }
+
+    .sidebar-toggle {
+        display: none;
+    }
+} 

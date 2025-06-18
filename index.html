@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PING2RETRIEVE - Online Lost and Found System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    :root {
+      --primary: #0f766e;
+      --primary-dark: #115e59;
+      --primary-light: #14b8a6;
+      --accent: #f97316;
+      --accent-light: #fb923c;
+      --text-dark: #1e293b;
+      --text-light: #64748b;
+      --background: #f8fafc;
+      --surface: #ffffff;
+      --error: #ef4444;
+      --success: #10b981;
+      --border: #e2e8f0;
+    }
+
+    body {
+      background-color: var(--background);
+      color: var(--text-dark);
+      line-height: 1.6;
+      background-image: url('https://pia4b.wordpress.com/wp-content/uploads/2020/10/92460401-501011253912938-7415584018084659200-n-1.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 20px 0;
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .logo i {
+      margin-right: 10px;
+      color: var(--accent);
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 20px;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    nav ul li a:hover {
+      color: var(--accent);
+    }
+
+    .header-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    .cta-button {
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 30px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(249, 115, 22, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cta-button.sign-in {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2);
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(249, 115, 22, 0.3);
+    }
+
+    .cta-button.sign-in:hover {
+      box-shadow: 0 6px 16px rgba(15, 118, 110, 0.3);
+    }
+
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                  url('assets/images/hero-bg.jpg') center/cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      padding: 2rem;
+    }
+
+    .hero-content {
+      max-width: 800px;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .hero-buttons .btn {
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+    }
+
+    .features {
+      padding: 5rem 2rem;
+      background: #f8f9fa;
+    }
+
+    .features h2 {
+      text-align: center;
+      margin-bottom: 3rem;
+      font-size: 2.5rem;
+      color: #333;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      color: #ffd700;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card h3 {
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    .feature-card p {
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .how-it-works {
+      padding: 5rem 2rem;
+    }
+
+    .how-it-works h2 {
+      text-align: center;
+      margin-bottom: 3rem;
+      font-size: 2.5rem;
+      color: #333;
+    }
+
+    .steps {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .step:last-child {
+      margin-bottom: 0;
+    }
+
+    .step-number {
+      width: 50px;
+      height: 50px;
+      background: #ffd700;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #333;
+      margin-right: 2rem;
+      flex-shrink: 0;
+    }
+
+    .step-content {
+      flex-grow: 1;
+    }
+
+    .step h3 {
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+
+    .step p {
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .cta {
+      padding: 5rem 2rem;
+      background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+                  url('assets/images/cta-bg.jpg') center/cover;
+      text-align: center;
+      color: white;
+    }
+
+    .cta h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .cta p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta .btn {
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+      }
+
+      .step {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .step-number {
+        margin-right: 0;
+        margin-bottom: 1rem;
+      }
+    }
+
+    footer {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 60px 20px 20px;
+      margin-top: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-section {
+      padding: 0 20px;
+    }
+
+    .footer-section h3 {
+      color: var(--accent);
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .footer-section h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .footer-section p {
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent);
+      transform: translateX(5px);
+    }
+
+    .footer-links i {
+      font-size: 14px;
+      color: var(--accent);
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .social-links a {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+      background: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 40px;
+      margin-top: 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer-bottom p {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9rem;
+      margin: 5px 0;
+    }
+
+    .footer-bottom a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer-bottom a:hover {
+      color: var(--accent-light);
+    }
+
+    @media (max-width: 768px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .footer-section h3::after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .social-links {
+        justify-content: center;
+      }
+
+      .footer-links a {
+        justify-content: center;
+      }
+    }
+
+    /* Updated Modal Styles for Scrollable Content */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+      padding: 20px;
+    }
+
+    .modal.show {
+      opacity: 1;
+    }
+
+    .modal-content {
+      background: var(--surface);
+      border-radius: 20px;
+      width: 90%;
+      max-width: 400px;
+      position: relative;
+      transform: translateY(-20px);
+      opacity: 0;
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0 15px 35px rgba(15, 118, 110, 0.1);
+      border: 1px solid var(--border);
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal.show .modal-content {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .modal-header {
+      padding: 20px 40px 0;
+      position: relative;
+      background: linear-gradient(145deg, #ffffff, #f8f9fa);
+      border-radius: 20px 20px 0 0;
+      z-index: 1;
+    }
+
+    .modal-body {
+      padding: 20px 40px;
+      overflow-y: auto;
+      flex: 1;
+      /* Custom Scrollbar */
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary) var(--background);
+    }
+
+    .modal-body::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .modal-body::-webkit-scrollbar-track {
+      background: var(--background);
+      border-radius: 4px;
+    }
+
+    .modal-body::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    .modal-body::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-dark);
+    }
+
+    .modal-footer {
+      padding: 0 40px 20px;
+      background: linear-gradient(145deg, #ffffff, #f8f9fa);
+      border-radius: 0 0 20px 20px;
+      z-index: 1;
+    }
+
+    .close-modal {
+      position: absolute;
+      right: 20px;
+      top: 15px;
+      font-size: 24px;
+      cursor: pointer;
+      color: #666;
+      transition: all 0.3s ease;
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(0, 35, 102, 0.05);
+      z-index: 3;
+    }
+
+    .close-modal:hover {
+      transform: rotate(90deg);
+      background: rgba(0, 35, 102, 0.1);
+      color: var(--primary);
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .form-group label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      color: var(--primary);
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .form-group .help-text {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      margin-top: 4px;
+      display: block;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 15px 12px 40px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+      background-color: var(--background);
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background-color: white;
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+    }
+
+    .form-group input::placeholder {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 15px;
+      top: 38px;
+      cursor: pointer;
+      color: var(--text-light);
+      transition: color 0.3s ease;
+      background: none;
+      border: none;
+      padding: 5px;
+    }
+
+    .password-toggle:hover {
+      color: var(--primary);
+    }
+
+    .password-strength {
+      height: 4px;
+      background: #eee;
+      margin-top: 8px;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .password-strength-bar {
+      height: 100%;
+      width: 0;
+      transition: all 0.3s ease;
+    }
+
+    .strength-weak { background-color: var(--error); width: 33.33%; }
+    .strength-medium { background-color: var(--accent); width: 66.66%; }
+    .strength-strong { background-color: var(--success); width: 100%; }
+
+    .form-submit {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .form-submit:hover {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(15, 118, 110, 0.3);
+    }
+
+    .form-submit i {
+      font-size: 18px;
+    }
+
+    .error-message {
+      color: var(--error);
+      font-size: 14px;
+      margin-top: 5px;
+      display: none;
+      animation: shake 0.5s ease-in-out;
+      background: rgba(239, 68, 68, 0.1);
+      padding: 8px 12px;
+      border-radius: 5px;
+      border-left: 3px solid var(--error);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .error-message i {
+      font-size: 16px;
+    }
+
+    .success-message {
+      color: var(--success);
+      font-size: 14px;
+      margin-top: 5px;
+      display: none;
+      background: rgba(16, 185, 129, 0.1);
+      padding: 8px 12px;
+      border-radius: 5px;
+      border-left: 3px solid var(--success);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .success-message i {
+      font-size: 16px;
+    }
+
+    .form-footer {
+      text-align: center;
+      margin-top: 25px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(0, 35, 102, 0.1);
+    }
+
+    .form-footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 5px 10px;
+      border-radius: 5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .form-footer a:hover {
+      background: rgba(15, 118, 110, 0.05);
+    }
+
+    .form-footer a i {
+      font-size: 14px;
+    }
+
+    /* Accessibility improvements */
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    /* Focus styles for keyboard navigation */
+    a:focus, button:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    /* Loading state improvements */
+    .loading {
+      position: relative;
+      pointer-events: none;
+      background: linear-gradient(45deg, #001a4d, #002366) !important;
+    }
+
+    .loading::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      top: 50%;
+      left: 50%;
+      margin: -10px 0 0 -10px;
+      border: 2px solid #ffffff;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: loading 0.8s linear infinite;
+    }
+
+    @keyframes loading {
+      to { transform: rotate(360deg); }
+    }
+
+    .form-title {
+      text-align: center;
+      color: var(--primary);
+      margin-bottom: 30px;
+      font-size: 28px;
+      font-weight: 700;
+      position: relative;
+      padding-bottom: 15px;
+    }
+
+    .form-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 2px;
+    }
+
+    /* Scroll to Top Button */
+    .scroll-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2);
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .scroll-to-top:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(15, 118, 110, 0.3);
+    }
+
+    .scroll-to-top.visible {
+      display: flex;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Smooth Scroll Behavior */
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 80px; /* Accounts for fixed header */
+    }
+
+    /* Active Navigation Link */
+    nav ul li a.active {
+      color: var(--accent);
+      position: relative;
+    }
+
+    nav ul li a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    @media (max-width: 992px) {
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 576px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container header-flex">
+      <div class="logo">
+        <i class="fas fa-search"></i> PING<span style="color:#FFD700;">2</span>RETRIEVE
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#how">How It Works</a></li>
+          <li><a href="#about">About</a></li>
+        </ul>
+      </nav>
+      <div class="header-buttons">
+        <button class="cta-button sign-in" onclick="window.location.href='login.html'">
+          <i class="fas fa-sign-in-alt"></i>
+          Sign In
+        </button>
+        <button class="cta-button" id="headerSignUp">
+          <i class="fas fa-user-plus"></i>
+          Sign Up
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Find Your Lost Items with Ease</h1>
+      <p>PING2RETRIEVE is an online lost and found system for OMSC Mamburao Campus. Report lost items or browse found items to help reunite them with their owners.</p>
+      <div class="hero-buttons">
+        <button class="btn btn-primary" onclick="window.location.href='pages/report.html'">Report Lost Item</button>
+        <button class="btn btn-outline" onclick="window.location.href='pages/search.html'">Browse Found Items</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="features">
+    <h2>Features</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">��</div>
+        <h3>Easy Search</h3>
+        <p>Search through found items with advanced filters and categories to quickly locate your lost belongings.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📝</div>
+        <h3>Simple Reporting</h3>
+        <p>Report lost items with detailed descriptions and photos to increase chances of recovery.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔔</div>
+        <h3>Instant Notifications</h3>
+        <p>Get notified when your lost item is found or when a potential match is identified.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section id="how" class="how-it-works">
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>Report Your Lost Item</h3>
+          <p>Fill out a detailed form with information about your lost item, including description, location, and photos if available.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>Search Found Items</h3>
+          <p>Browse through the database of found items or use the search function to look for your lost item.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>Get Notified</h3>
+          <p>Receive notifications when your lost item is found or when a potential match is identified.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Enhanced Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>About PING2RETRIEVE</h3>
+        <p>A centralized web-based platform for reporting and recovering lost items at Occidental Mindoro State College - Mamburao Campus.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul class="footer-links">
+          <li><a href="#features"><i class="fas fa-chevron-right"></i>Features</a></li>
+          <li><a href="#how"><i class="fas fa-chevron-right"></i>How It Works</a></li>
+          <li><a href="#about"><i class="fas fa-chevron-right"></i>About Us</a></li>
+          <li><a href="#contact"><i class="fas fa-chevron-right"></i>Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h3>Contact Info</h3>
+        <ul class="footer-links">
+          <li><a href="mailto:support@ping2retrieve.edu.ph"><i class="fas fa-envelope"></i>support@ping2retrieve.edu.ph</a></li>
+          <li><a href="tel:+1234567890"><i class="fas fa-phone"></i>+123 456 7890</a></li>
+          <li><a href="#"><i class="fas fa-map-marker-alt"></i>OMSC Mamburao Campus, Occidental Mindoro</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h3>Office Hours</h3>
+        <ul class="footer-links">
+          <li><i class="far fa-clock"></i>Monday - Friday: 8:00 AM - 5:00 PM</li>
+          <li><i class="far fa-clock"></i>Saturday - Sunday: Closed</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 PING2RETRIEVE | Occidental Mindoro State College - Mamburao Campus</p>
+      <p>Developed by <a href="#">BSIT Research Team</a> | All Rights Reserved</p>
+    </div>
+  </footer>
+
+  <!-- Sign In Modal -->
+  <div id="signInModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close-modal" role="button" aria-label="Close modal">&times;</span>
+        <h2 class="form-title">Welcome Back!</h2>
+      </div>
+      <div class="modal-body">
+        <form id="signInForm">
+          <div class="form-group">
+            <label for="signInEmail">
+              <i class="fas fa-envelope"></i>
+              Email Address
+            </label>
+            <input type="email" id="signInEmail" required placeholder="Enter your email address">
+            <div class="help-text">We'll never share your email with anyone else.</div>
+            <div class="error-message" id="signInEmailError">
+              <i class="fas fa-exclamation-circle"></i>
+              Please enter a valid email address
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="signInPassword">
+              <i class="fas fa-lock"></i>
+              Password
+            </label>
+            <input type="password" id="signInPassword" required placeholder="Enter your password">
+            <button type="button" class="password-toggle" aria-label="Toggle password visibility">
+              <i class="fas fa-eye"></i>
+            </button>
+            <div class="error-message" id="signInPasswordError">
+              <i class="fas fa-exclamation-circle"></i>
+              Please enter your password
+            </div>
+          </div>
+          <button type="submit" class="form-submit">
+            <i class="fas fa-sign-in-alt"></i>
+            Sign In
+          </button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <div class="form-footer">
+          <p>Don't have an account? <a href="#" id="showSignUp"><i class="fas fa-user-plus"></i> Sign Up</a></p>
+          <a href="#" class="forgot-password"><i class="fas fa-key"></i> Forgot Password?</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sign Up Modal -->
+  <div id="signUpModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close-modal" role="button" aria-label="Close modal">&times;</span>
+        <h2 class="form-title">Create Account</h2>
+      </div>
+      <div class="modal-body">
+        <form id="signUpForm">
+          <div class="form-group">
+            <label for="signUpName">
+              <i class="fas fa-user"></i>
+              Full Name
+            </label>
+            <input type="text" id="signUpName" required placeholder="Enter your full name">
+            <div class="help-text">Please enter your first and last name</div>
+            <div class="error-message" id="signUpNameError">
+              <i class="fas fa-exclamation-circle"></i>
+              Please enter your full name
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="signUpEmail">
+              <i class="fas fa-envelope"></i>
+              Email Address
+            </label>
+            <input type="email" id="signUpEmail" required placeholder="Enter your email address">
+            <div class="help-text">We'll never share your email with anyone else.</div>
+            <div class="error-message" id="signUpEmailError">
+              <i class="fas fa-exclamation-circle"></i>
+              Please enter a valid email address
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="signUpPassword">
+              <i class="fas fa-lock"></i>
+              Password
+            </label>
+            <input type="password" id="signUpPassword" required placeholder="Create a password">
+            <button type="button" class="password-toggle" aria-label="Toggle password visibility">
+              <i class="fas fa-eye"></i>
+            </button>
+            <div class="password-strength">
+              <div class="password-strength-bar"></div>
+            </div>
+            <div class="help-text">Password must be at least 8 characters long</div>
+            <div class="error-message" id="signUpPasswordError">
+              <i class="fas fa-exclamation-circle"></i>
+              Please enter a valid password
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="signUpConfirmPassword">
+              <i class="fas fa-lock"></i>
+              Confirm Password
+            </label>
+            <input type="password" id="signUpConfirmPassword" required placeholder="Confirm your password">
+            <button type="button" class="password-toggle" aria-label="Toggle password visibility">
+              <i class="fas fa-eye"></i>
+            </button>
+            <div class="error-message" id="signUpConfirmPasswordError">
+              <i class="fas fa-exclamation-circle"></i>
+              Passwords do not match
+            </div>
+          </div>
+          <button type="submit" class="form-submit">
+            <i class="fas fa-user-plus"></i>
+            Create Account
+          </button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <div class="form-footer">
+          <p>Already have an account? <a href="#" id="showSignIn"><i class="fas fa-sign-in-alt"></i> Sign In</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Scroll to Top Button -->
+  <button class="scroll-to-top" aria-label="Scroll to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script>
+    // Modal functionality
+    const signInModal = document.getElementById('signInModal');
+    const signUpModal = document.getElementById('signUpModal');
+    const headerSignInBtn = document.getElementById('headerSignIn');
+    const headerSignUpBtn = document.getElementById('headerSignUp');
+    const closeButtons = document.querySelectorAll('.close-modal');
+    const showSignUpLink = document.getElementById('showSignUp');
+    const showSignInLink = document.getElementById('showSignIn');
+
+    // Show sign in modal when clicking Sign In button
+    headerSignInBtn.addEventListener('click', () => {
+      showModal(signInModal);
+    });
+
+    // Show sign up modal when clicking Sign Up button
+    headerSignUpBtn.addEventListener('click', () => {
+      showModal(signUpModal);
+    });
+
+    // Close modal when clicking close button
+    closeButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        hideModal(signInModal);
+        hideModal(signUpModal);
+      });
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener('click', (e) => {
+      if (e.target === signInModal) {
+        hideModal(signInModal);
+      }
+      if (e.target === signUpModal) {
+        hideModal(signUpModal);
+      }
+    });
+
+    // Switch between sign in and sign up
+    showSignUpLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      hideModal(signInModal);
+      setTimeout(() => {
+        showModal(signUpModal);
+      }, 300);
+    });
+
+    showSignInLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      hideModal(signUpModal);
+      setTimeout(() => {
+        showModal(signInModal);
+      }, 300);
+    });
+
+    // Updated modal show/hide functions
+    function showModal(modal) {
+      modal.style.display = 'flex';
+      // Trigger reflow
+      modal.offsetHeight;
+      modal.classList.add('show');
+    }
+
+    function hideModal(modal) {
+      modal.classList.remove('show');
+      setTimeout(() => {
+        modal.style.display = 'none';
+      }, 300);
+    }
+
+    // Password visibility toggle
+    document.querySelectorAll('.password-toggle').forEach(button => {
+      button.addEventListener('click', function() {
+        const input = this.previousElementSibling;
+        const icon = this.querySelector('i');
+        
+        if (input.type === 'password') {
+          input.type = 'text';
+          icon.classList.remove('fa-eye');
+          icon.classList.add('fa-eye-slash');
+        } else {
+          input.type = 'password';
+          icon.classList.remove('fa-eye-slash');
+          icon.classList.add('fa-eye');
+        }
+      });
+    });
+
+    // Password strength checker
+    const passwordInput = document.getElementById('signUpPassword');
+    const strengthBar = document.querySelector('.password-strength-bar');
+
+    passwordInput.addEventListener('input', function() {
+      const password = this.value;
+      let strength = 0;
+      
+      if (password.length >= 8) strength += 1;
+      if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength += 1;
+      if (password.match(/\d/)) strength += 1;
+      if (password.match(/[^a-zA-Z\d]/)) strength += 1;
+
+      strengthBar.className = 'password-strength-bar';
+      if (strength <= 1) {
+        strengthBar.classList.add('strength-weak');
+      } else if (strength <= 3) {
+        strengthBar.classList.add('strength-medium');
+      } else {
+        strengthBar.classList.add('strength-strong');
+      }
+    });
+
+    // Form validation
+    function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function validatePassword(password) {
+      return password.length >= 8;
+    }
+
+    document.getElementById('signInForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = e.target.querySelector('.form-submit');
+      const email = document.getElementById('signInEmail');
+      const password = document.getElementById('signInPassword');
+      let isValid = true;
+
+      // Reset errors
+      document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+
+      // Validate email
+      if (!validateEmail(email.value)) {
+        document.getElementById('signInEmailError').style.display = 'flex';
+        isValid = false;
+      }
+
+      // Validate password
+      if (!password.value) {
+        document.getElementById('signInPasswordError').style.display = 'flex';
+        isValid = false;
+      }
+
+      if (isValid) {
+        submitBtn.classList.add('loading');
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        console.log('Sign In:', { email: email.value, password: password.value });
+        alert('Sign in functionality will be implemented with backend integration');
+        submitBtn.classList.remove('loading');
+      }
+    });
+
+    document.getElementById('signUpForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = e.target.querySelector('.form-submit');
+      const name = document.getElementById('signUpName');
+      const email = document.getElementById('signUpEmail');
+      const password = document.getElementById('signUpPassword');
+      const confirmPassword = document.getElementById('signUpConfirmPassword');
+      let isValid = true;
+
+      // Reset errors
+      document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+
+      // Validate name
+      if (!name.value.trim()) {
+        document.getElementById('signUpNameError').style.display = 'flex';
+        isValid = false;
+      }
+
+      // Validate email
+      if (!validateEmail(email.value)) {
+        document.getElementById('signUpEmailError').style.display = 'flex';
+        isValid = false;
+      }
+
+      // Validate password
+      if (!validatePassword(password.value)) {
+        document.getElementById('signUpPasswordError').style.display = 'flex';
+        isValid = false;
+      }
+
+      // Validate password confirmation
+      if (password.value !== confirmPassword.value) {
+        document.getElementById('signUpConfirmPasswordError').style.display = 'flex';
+        isValid = false;
+      }
+
+      if (isValid) {
+        submitBtn.classList.add('loading');
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        console.log('Sign Up:', { 
+          name: name.value, 
+          email: email.value, 
+          password: password.value 
+        });
+        alert('Sign up functionality will be implemented with backend integration');
+        submitBtn.classList.remove('loading');
+      }
+    });
+
+    // Smooth Scrolling
+    document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+          // Update active state
+          document.querySelectorAll('nav a').forEach(link => link.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Smooth scroll to target
+          targetElement.scrollIntoView({
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+
+    // Scroll to Top Button
+    const scrollToTopBtn = document.querySelector('.scroll-to-top');
+
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        scrollToTopBtn.classList.add('visible');
+      } else {
+        scrollToTopBtn.classList.remove('visible');
+      }
+    });
+
+    scrollToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Update active navigation link on scroll
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('nav a[href^="#"]');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        
+        if (window.pageYOffset >= sectionTop - 200) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').slice(1) === current) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
